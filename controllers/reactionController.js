@@ -1,69 +1,50 @@
-const { Course, Student } = require('../models');
+const { Reaction, User } = require('../models');
 
 module.exports = {
-  // Get all courses
-  async getCourses(req, res) {
+  // Get all reactions
+  
+  async getSingleReaction(req, res) {
     try {
-      const courses = await Course.find().populate('students');
-      res.json(courses);
-    } catch (err) {
-      res.status(500).json(err);
-    }
-  },
-  // Get a course
-  async getSingleCourse(req, res) {
-    try {
-      const course = await Course.findOne({ _id: req.params.courseId })
-        .populate('students');
+      const reaction = await Reaction.findOne({ _id: req.params.ReactionId })
+        .populate('reaction');
 
-      if (!course) {
-        return res.status(404).json({ message: 'No course with that ID' });
+      if (!reaction) {
+        return res.status(404).json({ message: 'No reaction with that ID' });
       }
 
-      res.json(course);
+      res.json(reaction);
     } catch (err) {
       res.status(500).json(err);
     }
   },
-  // Create a course
-  async createCourse(req, res) {
+  
+  // Update a reaction
+  async updateReaction(req, res) {
     try {
-      const course = await Course.create(req.body);
-      res.json(course);
-    } catch (err) {
-      console.log(err);
-      return res.status(500).json(err);
-    }
-  },
-  // Delete a course
-  async deleteCourse(req, res) {
-    try {
-      const course = await Course.findOneAndDelete({ _id: req.params.courseId });
-
-      if (!course) {
-        res.status(404).json({ message: 'No course with that ID' });
-      }
-
-      await Student.deleteMany({ _id: { $in: course.students } });
-      res.json({ message: 'Course and students deleted!' });
-    } catch (err) {
-      res.status(500).json(err);
-    }
-  },
-  // Update a course
-  async updateCourse(req, res) {
-    try {
-      const course = await Course.findOneAndUpdate(
-        { _id: req.params.courseId },
+      const updatedReaction = await User.findOneAndReaction(
+        { _id: req.params.ReactionId },
         { $set: req.body },
-        { runValidators: true, new: true }
+        { new: true }
       );
+      
+      res.json(updatedReaction);
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({ message: 'Internal Server Error' });
+    }
+  },
+  // Delete a reaction
 
-      if (!course) {
-        res.status(404).json({ message: 'No course with this id!' });
+  async deleteReaction(req, res) {
+    try {
+      const reaction = await Reaction.findOneAndDelete({ _id: req.params.reactionId });
+
+      if (!reaction) {
+        res.status(404).json({ message: 'No reaction with that ID' });
       }
 
-      res.json(course);
+      await Reaction.deleteMany({ _id: { $in: thoughts.reaction } });
+      res.json({ message: 'reaction deleted!' });
     } catch (err) {
       res.status(500).json(err);
     }
