@@ -3,11 +3,11 @@ const { Schema, model } = require('mongoose');
 // Schema to create User model
 const userSchema = new Schema(
   {
-    user: {
+    username: {
       type: String,
       required: true,
-      trimmed: true,
-      maxlength: 50, // Change max_length to maxlength
+      trim: true, // Corrected to trim
+      maxlength: 50,
     },
     email: {
       type: String,

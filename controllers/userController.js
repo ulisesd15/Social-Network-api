@@ -12,14 +12,14 @@ module.exports = {
   // Get all users
   async getUser(req, res) {
     try {
-      const user = await user.find();
-
+      const users = await User.find();
+      
       const userObj = {
         users,
         headCount: await headCount(),
       };
-
-      res.json(studentObj);
+      
+      res.json(userObj);
     } catch (err) {
       console.log(err);
       return res.status(500).json(err);
